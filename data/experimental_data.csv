@@ -1,0 +1,2 @@
+test_id,oxidizer_flow_slpm,oxidizer_density_g_per_l,initial_fuel_mass_g,final_fuel_mass_g,burn_time_s,initial_port_diameter_mm,grain_length_mm,paraffin_density_kg_m3,throat_diameter_mm,chamber_pressure_bar_exp,thrust_n_exp,cstar_exp_m_s,cstar_theo_m_s,cf,isp_equiv_m_s_exp
+LAB-001,197.0,1.842,100.8,67.86,5.0,10.0,100.0,900.0,6.0,4.0293,21.943,912.96,1048.2,1.4294,1498.3

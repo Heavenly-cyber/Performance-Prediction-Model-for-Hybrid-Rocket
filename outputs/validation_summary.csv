@@ -1,0 +1,2 @@
+test_id,chamber_pressure_bar_pred,chamber_pressure_bar_exp,chamber_pressure_abs_error,chamber_pressure_pct_error,thrust_n_pred,thrust_n_exp,thrust_abs_error,thrust_pct_error,isp_s_pred,isp_s_exp,isp_abs_error,isp_pct_error
+LAB-001,4.684442942186395,4.0293,0.6551429421863952,16.259472915553452,18.932332073172,21.943,3.0106679268280025,13.720402528496571,152.7837824333488,152.784080190483,0.0002977571342057672,0.00019488753922171706
