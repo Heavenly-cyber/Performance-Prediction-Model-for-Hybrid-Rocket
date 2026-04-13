@@ -146,60 +146,188 @@ Baseline values included in `data/experimental_data.csv`:
 └── README.md
 ```
 
-## Setup with uv
+## Setup Guide
 
-The repository is pinned to Python 3.14 through `.python-version`.
+This project requires Python `3.14` as defined in `pyproject.toml`.
 
-Create or refresh the environment:
-
-```bash
-UV_CACHE_DIR=/tmp/uv-cache uv venv -p /home/heavenly/.local/share/uv/python/cpython-3.14-linux-x86_64-gnu/bin/python3.14 .venv --clear
-```
-
-Install the project and development tools:
+### 1. Clone the repository
 
 ```bash
-UV_CACHE_DIR=/tmp/uv-cache uv pip install --python .venv/bin/python -e ".[dev]"
+git clone <your-repository-url>
+cd project
 ```
 
-## Commands to Run
+### 2. Install `uv` or use `pip`
+
+Option A: install `uv` (recommended)
+
+```bash
+pip install uv
+```
+
+If `pip` is not available on your machine, install Python first and then verify:
+
+```bash
+python --version
+python -m pip --version
+```
+
+Option B: use standard `pip` only
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
+
+On Windows PowerShell, activate the environment with:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### 3. Install project dependencies
+
+Using `uv`:
+
+```bash
+uv venv --python 3.14 .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+```
+
+Using `pip`:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+The `requirements.txt` file installs the project plus its required libraries such as `matplotlib`, `typer`, and `pytest`.
+
+## How to Run It
+
+### Executable entry point
+
+This project does not ship a separate standalone executable file such as `run.sh` or `main.exe`.
+
+The runnable entry point is the Python CLI module:
+
+- `src/hybrid_rocket/cli.py`
+
+You run it through Python as a module:
+
+```bash
+python -m hybrid_rocket.cli <command>
+```
+
+If you are using the local virtual environment without activation, you can also run:
+
+```bash
+.venv/bin/python -m hybrid_rocket.cli <command>
+```
+
+### Available commands
 
 Run a baseline prediction:
 
 ```bash
-.venv/bin/python -m hybrid_rocket.cli run
+python -m hybrid_rocket.cli run
 ```
 
 Run validation and save the CSV summary:
 
 ```bash
-.venv/bin/python -m hybrid_rocket.cli validate
+python -m hybrid_rocket.cli validate
 ```
 
 Generate plots:
 
 ```bash
-.venv/bin/python -m hybrid_rocket.cli plot
+python -m hybrid_rocket.cli plot
 ```
 
 Run tests:
 
 ```bash
-.venv/bin/python -m pytest
+python -m pytest
 ```
 
-## Output Files
+### Custom input and output paths
 
-The validation command creates:
+The `validate` and `plot` commands accept file paths.
+
+Use a custom input CSV for validation:
+
+```bash
+python -m hybrid_rocket.cli validate --data-path data/experimental_data.csv
+```
+
+Save validation output to a custom file:
+
+```bash
+python -m hybrid_rocket.cli validate --output-path outputs/validation_summary.csv
+```
+
+Generate plots from a custom dataset and save them to a custom folder:
+
+```bash
+python -m hybrid_rocket.cli plot --data-path data/experimental_data.csv --output-dir outputs
+```
+
+## How to See the Results
+
+### Where results are saved
+
+By default, the generated results are saved inside the `outputs/` folder.
+
+Validation output:
 
 - `outputs/validation_summary.csv`
 
-The plotting command creates:
+Plot outputs:
 
 - `outputs/predicted_vs_experimental_thrust.png`
 - `outputs/predicted_vs_experimental_pressure.png`
 - `outputs/predicted_vs_experimental_isp.png`
 - `outputs/regression_rate_vs_oxidizer_mass_flux.png`
+
+Matplotlib may also create:
+
+- `outputs/.mplconfig/`
+
+### How to open the results
+
+- Open `outputs/validation_summary.csv` in Excel, LibreOffice Calc, Google Sheets, or any CSV viewer.
+- Open the `.png` files from the `outputs/` folder using any image viewer.
+
+### How input data is provided
+
+The main input file is:
+
+- `data/experimental_data.csv`
+
+The application reads this CSV file when you run `validate` or `plot`.
+
+Current CSV columns:
+
+- `test_id`
+- `oxidizer_flow_slpm`
+- `oxidizer_density_g_per_l`
+- `initial_fuel_mass_g`
+- `final_fuel_mass_g`
+- `burn_time_s`
+- `initial_port_diameter_mm`
+- `grain_length_mm`
+- `paraffin_density_kg_m3`
+- `throat_diameter_mm`
+- `chamber_pressure_bar_exp`
+- `thrust_n_exp`
+- `cstar_exp_m_s`
+- `cstar_theo_m_s`
+- `cf`
+- `isp_equiv_m_s_exp`
+
+To use your own data, add more rows to `data/experimental_data.csv` in the same format, or create another CSV file with the same column names and pass it using `--data-path`.
 
 ## Explanation of Each Plot
 
